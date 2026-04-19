@@ -29,6 +29,12 @@ utils.log("Beginning extraction program.", BEGIN)
 local choices = utils.prepare_registries()
 local function input_completer (text) return completion.choice(text, choices) end
 
+local storage_config = utils.get_json_file_as_object(constants.STORAGES_CONFIG_FILE_PATH)
+if not storage_config then 
+    utils.log("Could not find storage config file", ERROR)
+    return
+end
+
 local INPUT_ID = arg[1]
 local INPUT_COUNT = nil
 local INPUT_NBT = nil
@@ -46,7 +52,7 @@ local function end_program()
 end
 
 -- Getting the extraction inventory ready
-local OUT = settings.get("dim.config").output
+local OUT = storage_config.output
 local output = peripheral.wrap(OUT)
 
 if not INPUT_ID then

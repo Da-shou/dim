@@ -29,8 +29,14 @@ local start = utils.start_stopwatch()
 utils.log("Beginning insertion...", BEGIN)
 utils.log("Scanning contents of desired input storage...", DEBUG)
 
+local storage_config = utils.get_json_file_as_object(constants.STORAGES_CONFIG_FILE_PATH)
+if not storage_config then 
+    utils.log("Could not find storage config file", ERROR)
+    return
+end
+
 -- Getting the insertion inventory ready
-local IN = settings.get("dim.config").input
+local IN = storage_config.input
 local input = peripheral.wrap(IN)
 local input_stacks = input.list()
 
@@ -274,12 +280,16 @@ for input_slot, input_stack in pairs(input_stacks) do
                     end
                 end
             else
+
+				-- Adding the item ID to the registry
+				utils.append_id_to_registry(stack_details.name)
+
                 -- If we know an empty slot was used that means
                 -- a new stack has to be created in the JSON file under
                 -- the item section and that the section has to
                 -- potentially be created too
                 -- This does both.
-                
+
                 utils.log(("Adding new stack of %d x %s to the JSON database"):format(stack_details.count, stack_details.name), DEBUG)
                 utils.add_stack_to_db(
                     db,

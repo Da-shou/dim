@@ -14,13 +14,13 @@ local utils = require("lib/utils")
 
 local INFO = constants.LOGTYPE_INFO
 local ERROR = constants.LOGTYPE_ERROR
+local DEBUG = constants.LOGTYPE_DEBUG
 local BEGIN = constants.LOGTYPE_BEGIN
 local END = constants.LOGTYPE_END
 local TIMER = constants.LOGTYPE_TIMER
 
 local LM = constants.LOADING_MODULO
 
--- Start timer
 local start = utils.start_stopwatch()
 
 utils.log("Starting inventory program...", BEGIN)
@@ -31,9 +31,14 @@ local names = peripheral.getNames()
 
 utils.reset_terminal()
 
-local dim_config = settings.get("dim.config")
-local INPUT = dim_config.input
-local OUTPUT = dim_config.output
+local storage_config = utils.get_json_file_as_object(constants.STORAGES_CONFIG_FILE_PATH)
+if not storage_config then 
+    utils.log("Could not find storage config file", ERROR)
+    return
+end
+
+local INPUT = storage_config.input
+local OUTPUT = storage_config.output
 
 -- Parses through every peripherals in the network and if
 -- their types is the storage type specifies, adds them
@@ -43,11 +48,11 @@ function get_inventories()
     local results = {}
     for _,name in ipairs(names) do
         local type = peripheral.getType(name)
-        if type == dim_config.type and name ~= INPUT and name ~= OUTPUT then
+        if type == storage_config.type and name ~= INPUT and name ~= OUTPUT then
             table.insert(results, name)
         end     
     end
-    return results, table.getn(results)
+    return results, table.getn(results) 
 end
 
 -- Getting the inventories and the count

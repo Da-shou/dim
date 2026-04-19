@@ -10,7 +10,7 @@
 
 local constants = {}
 
-constants.dim_version = "Alpha 0.1.2"
+constants.dim_version = "Alpha 0.1.5"
 
 -- Base path of the program
 constants.BASE_PATH = "/dim"
@@ -38,16 +38,16 @@ constants.ASCII_LOGO_FILE_PATH = constants.BASE_PATH.."/ascii/dim_logo.txt"
 -- The location and name of the JSON file containing the names
 -- of all the items in the game. Allows for indexed searching in
 -- the database.
+constants.REGISTRY_DIM_PATH = constants.BASE_PATH.."/reg/dimreg.json"
 constants.REGISTRY_MINECRAFT_ITEMS_PATH = constants.BASE_PATH.."/reg/minecraft.json"
 constants.REGISTRY_COMPUTERCRAFT_ITEMS_PATH = constants.BASE_PATH.."/reg/computercraft.json"
 
 constants.REG_PATHS = {
-    constants.REGISTRY_MINECRAFT_ITEMS_PATH,
-    constants.REGISTRY_COMPUTERCRAFT_ITEMS_PATH
+	constants.REGISTRY_DIM_PATH
 }
 
 -- Will show the logs marked as "DEBUG"
-constants.SHOW_DEBUG = false
+constants.SHOW_DEBUG = true
 
 -- The type of inventory to scan for
 constants.STORAGE_TYPE = "minecraft:barrel"

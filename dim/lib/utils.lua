@@ -80,8 +80,7 @@ end
 -- Presents the user with a choice.
 -- <first[string]> Text in the first choice
 -- <second[string]> Text in the second choice.
-function utils.choice(first,second, startsOn, spacing)
-    if not spacing then spacing = 10 end
+function utils.choice(first,second, startsOn)
     if not startsOn then startsOn = 1 end
     print()
     print()
@@ -101,6 +100,9 @@ function utils.choice(first,second, startsOn, spacing)
 
         term.setCursorPos(1,y+1)
         term.clearLine()
+        
+        -- how many chars inbetween options
+        local spacing = 15
 
         local middle_pos = math.floor(x/2)
         local start_f = middle_pos - (math.floor(string.len(first)/2)) - spacing
@@ -278,6 +280,24 @@ function utils.write_json_string_in_file(path, object)
     if not did_close then return false end
 
     return true
+end
+
+-- Appends a line of text to the file at specified path.
+-- Returns true if successful, false if an error occurred or the line already exists.
+-- NOTE : This appends to the file without overwriting existing content.
+-- path[string]     : path to the file that will be appended to.
+-- object[string]   : JSON-Serialized string to be appended as a new line.
+function utils.append_id_to_registry(id)
+	utils.log(("Adding %s to the registry"):format(id), DEBUG)
+	local reg = utils.get_json_file_as_object(constants.REGISTRY_DIM_PATH)
+	if not reg then return end
+	for _,s in ipairs(reg) do
+		utils.log(("Reading %s..."):format(s), DEBUG)
+		if s == id then return false end
+	end
+	table.insert(reg, id)
+	local new_reg = textutils.serializeJSON(reg)
+	return utils.write_json_string_in_file(constants.REGISTRY_DIM_PATH, new_reg)
 end
 
 -- Pads the string with left or right spacing
@@ -713,6 +733,7 @@ function utils.add_stack_to_db(database, section, slot, inv_name, details)
             source = inv_name,
             ["details"] = details
     })
+
 end
 
 -- Removes a stack of items to the JSON database. Used when extracting an
