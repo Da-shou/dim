@@ -48,6 +48,7 @@ function Installation()
 	utils.print_align_left(translations.setup_installation_loading_label)
 	print()
 
+	updateProgress()
 
 	local x_loading, y_loading = term.getCursorPos()
 

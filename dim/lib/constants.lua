@@ -47,7 +47,7 @@ constants.REG_PATHS = {
 }
 
 -- Will show the logs marked as "DEBUG"
-constants.SHOW_DEBUG = true
+constants.SHOW_DEBUG = false
 
 -- The type of inventory to scan for
 constants.STORAGE_TYPE = "minecraft:barrel"
